@@ -29,5 +29,6 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
+  console.log("'Server is up, don't forget to seed the db!");
   console.log('Server listening on port', port);
 });

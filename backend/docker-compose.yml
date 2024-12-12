@@ -1,7 +1,7 @@
 services:
   postgresdb:
     image: postgres
-    container_name: waldo_db
+    container_name: waldo-db
     env_file: ./.env
     restart: unless-stopped
     environment:
@@ -13,11 +13,12 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
-  app:
+  waldo-backend:
     depends_on:
       - postgresdb
+    image: waldo-backend
     build: ./
-    container_name: waldo_backend
+    container_name: waldo-backend
     restart: unless-stopped
     env_file: ./.env
     ports:
@@ -31,6 +32,10 @@ services:
     command: >
       sh -c "npx prisma migrate deploy &&
              node app.js"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.waldo-backend.rule=Host(`waldo.localhost`)'
+      - 'traefik.http.routers.waldo-backend.entrypoints=web'
 
 volumes:
   db:
