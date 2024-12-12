@@ -34,7 +34,7 @@ export const getSingleImage = async (req, res, next) => {
 export const getScoreByImage = async (req, res, next) => {
   try {
     const scores = await prisma.score.findMany({
-      where: { imageId: req.params.id },
+      where: { imageId: Number(req.params.id) },
     });
     res.json(scores);
   } catch (error) {
@@ -43,8 +43,11 @@ export const getScoreByImage = async (req, res, next) => {
 };
 
 export const createImage = async (req, res, next) => {
+  if (req.header('Authorization') !== process.env.SECRET)
+    return res.status(403).json({ message: 'Forbidden' });
+
   try {
-    const image = prisma.image.create(req.body);
+    const image = await prisma.image.create(req.body);
     res.json(image);
   } catch (error) {
     next(error);
@@ -52,16 +55,24 @@ export const createImage = async (req, res, next) => {
 };
 
 export const createScore = async (req, res, next) => {
+  if (req.header('Authorization') !== process.env.SECRET)
+    return res.status(403).json({ message: 'Forbidden' });
+
   const { name, time } = req.body;
   try {
-    const score = prisma.score.create({
+    const data = await prisma.image.update({
+      where: { id: Number(req.params.id) },
       data: {
-        name,
-        time,
-        imageId: req.params.id,
+        scores: {
+          create: {
+            name: name || 'Too cool to write name',
+            time,
+          },
+        },
       },
+      include: { entities: true, scores: true },
     });
-    res.json(score);
+    res.json(data);
   } catch (error) {
     next(error);
   }

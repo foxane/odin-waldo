@@ -5,6 +5,11 @@ prisma.image
     data: {
       name: 'Marvel Avenger',
       url: 'https://i.imgur.com/6NMYHbF.jpeg',
+      scores: {
+        createMany: {
+          data: [{ time: '9999.345s', name: 'Iam Speed' }],
+        },
+      },
       entities: {
         createMany: {
           data: [

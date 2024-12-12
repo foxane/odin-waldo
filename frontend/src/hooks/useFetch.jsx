@@ -15,10 +15,8 @@ export default function useFetch(endpoint) {
         if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
         const json = await response.json();
-        console.log(json);
         setData(json);
       } catch (error) {
-        console.log(error);
         setError(error);
       } finally {
         setLoading(false);
@@ -28,5 +26,5 @@ export default function useFetch(endpoint) {
     fetchData();
   }, [url]);
 
-  return { data, loading, error };
+  return { data, loading, error, setData };
 }

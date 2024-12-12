@@ -7,7 +7,6 @@ export default function verifyCoordinate(clickX, clickY, image, coordinates) {
 
   // Check each object in coordinates
   for (const { name, x, y, w, h } of coordinates) {
-    console.log(x, clickX);
     const scaledX = x * scaleX;
     const scaledY = y * scaleY;
     const scaledW = w * scaleX;
