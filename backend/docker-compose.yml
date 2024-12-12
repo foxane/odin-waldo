@@ -34,7 +34,7 @@ services:
              node app.js"
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.waldo-backend.rule=Host(`waldo.localhost`)'
+      - 'traefik.http.routers.waldo-backend.rule=PathPrefix(`/waldo`)'
       - 'traefik.http.routers.waldo-backend.entrypoints=web'
 
 volumes:
